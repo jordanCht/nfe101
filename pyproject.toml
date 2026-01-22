@@ -1,0 +1,10 @@
+[project]
+name = "tp-kafka-nfe101"
+version = "0.1.0"
+dependencies = [
+    "kafka-python",
+    "pandas",
+    "sqlalchemy",
+    "psycopg2",
+    "fastapi[standard]"
+]
