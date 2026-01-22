@@ -16,17 +16,27 @@ Lien stable : https://www.data.gouv.fr/api/1/datasets/r/8623fa1b-6575-4122-ab7a-
 
 ## Architecture
 
-Le système se compose de trois principaux composants :
+```                                                                                                                                                                      
++--------------------+     +---------------------+     +------------------+                                                                                               
+| TP2_NFE101.csv     | --> | Producteur (Python) | --> | Kafka (Topic)    |                                                                                               
+| (Source de données)|     | `producer.py`       |     | `nfe101-topic`   |                                                                                              
++--------------------+     +---------------------+     +--------v---------+                                                                                               
+                                                                |                                                                                                         
++-------------------------+     +------------------------+     +--------<---------+                                                                                        
+| API (FastAPI)           | <-- | PostgreSQL             | <-- | Consommateur     |                                                                                        
+| `exposition.py`         |     | `nfe101` DB            |     | (Python)         |                                                                                        
+| (Exposition des données)|     | `projet2.loyers` table |     | `consumer.py`    |                                                                        
++-------------------------+     +------------------------+     +------------------+                                                                                        
+```  
 
+Le système se compose de quatres principaux composants :
+
+1.  **Apache Kafka** : Container exécuté sous Docker Desktop avec l'image officiel https://kafka.apache.org/quickstart/
 1.  **Producteur (`producer.py`)**: Lit les enregistrements du fichier CSV des données nettoyées (`data/TP2_NFE101.csv`) et les publie en tant que messages dans un topic Kafka (`nfe101-topic`).
 2.  **Consommateur (`consumer.py`)**: S'abonne au topic Kafka, consomme les messages et les enregistre dans une table `loyers` d'une base de données PostgreSQL.
 3.  **API (`exposition.py`)**: Une API qui expose les données stockées en base.
 
 ### Apache kafka
-
-Le serveur kafka est executé sur dans un container docker. L'image officiel est utilisée (apache/kafka-4.1.1)
-
-Documentation officiel : https://kafka.apache.org/quickstart/
 
 Création du topic
 
